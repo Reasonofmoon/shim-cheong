@@ -1,0 +1,25 @@
+{
+  "name": "simcheong-jeon",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "심청전 - a procedurally rendered Three.js cinematic of the Korean folk tale",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "audit:test": "node --test \"scripts/**/*.test.mjs\"",
+    "audit:check": "node scripts/check-render-harness.mjs",
+    "audit:capture": "node scripts/capture.mjs"
+  },
+  "dependencies": {
+    "three": "^0.185.1"
+  },
+  "devDependencies": {
+    "@types/three": "^0.185.3",
+    "puppeteer-core": "^25.4.0",
+    "typescript": "^5.9.3",
+    "vite": "^8.2.0"
+  }
+}

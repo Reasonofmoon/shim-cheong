@@ -1,0 +1,157 @@
+{
+  "version": 1,
+  "domain": "procedural-render",
+  "project": "simcheong",
+  "url": "http://localhost:5178",
+  "viewport": {
+    "width": 1440,
+    "height": 810
+  },
+  "lanes": {
+    "id": [
+      "farewell",
+      "growing",
+      "vow",
+      "merchants",
+      "indangsu",
+      "dragonPalace",
+      "lotus",
+      "feast"
+    ],
+    "file": [
+      "src/scenes/act01Farewell.ts",
+      "src/scenes/act02Growing.ts",
+      "src/scenes/act03Vow.ts",
+      "src/scenes/act04Merchants.ts",
+      "src/scenes/act05Indangsu.ts",
+      "src/scenes/act06DragonPalace.ts",
+      "src/scenes/act07Lotus.ts",
+      "src/scenes/act08Feast.ts"
+    ],
+    "actIndex": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "captureAt": [
+      [
+        4,
+        24,
+        40,
+        50
+      ],
+      [
+        5,
+        18,
+        30,
+        44
+      ],
+      [
+        5,
+        20,
+        27,
+        42
+      ],
+      [
+        4,
+        17,
+        31,
+        47
+      ],
+      [
+        8,
+        31,
+        39,
+        50
+      ],
+      [
+        6,
+        24,
+        38,
+        50
+      ],
+      [
+        10,
+        24,
+        36,
+        47
+      ],
+      [
+        8,
+        30,
+        50,
+        57,
+        70
+      ]
+    ],
+    "intent": [
+      "겨울 들판. 상여 행렬이 멀어지고 눈먼 아버지만 아기를 안고 남는다. 그는 움직이지 않는다.",
+      "여름 마을. 전반은 갓난아이를 안고 젖을 구하는 아버지, 후반은 열다섯 청이가 그를 이끈다.",
+      "밤 산사. 연등 길이 개울에서 법당까지 오른다. 아버지가 무릎 꿇고 삼백 석을 약속한다.",
+      "새벽 포구. 청이가 상인들 앞에 나선다. 쌀이 집에 쌓이고 아버지는 아무것도 모른다.",
+      "폭풍 바다. 청이가 뱃머리에서 서쪽으로 두 번 절하고 뛰어내린다. 카메라가 물속까지 따라간다.",
+      "수정궁. 용이 여의주를 들고 돌고, 조개가 열려 어머니가 나온다. 위쪽에서 빛기둥이 내린다.",
+      "연꽃이 물속에서 떠올라 수면을 뚫고, 궁중 연못에서 열리며 청이가 일어선다.",
+      "궁궐 맹인잔치. 늦게 온 늙은 봉사가 딸의 목소리에 눈을 뜬다. 흰 화면 한 프레임."
+    ]
+  },
+  "shared": [
+    "src/builders/figure.ts",
+    "src/builders/materials.ts",
+    "src/builders/roof.ts",
+    "src/builders/hanok.ts",
+    "src/builders/temple.ts",
+    "src/builders/nature.ts",
+    "src/builders/water.ts",
+    "src/builders/ship.ts",
+    "src/builders/dragon.ts",
+    "src/builders/undersea.ts",
+    "src/builders/lotus.ts",
+    "src/builders/props.ts",
+    "src/core/palette.ts",
+    "src/core/stage.ts",
+    "src/core/cameraRig.ts",
+    "src/core/shot.ts",
+    "src/core/timeline.ts",
+    "src/core/director.ts",
+    "src/core/rng.ts",
+    "src/core/subtitles.ts",
+    "src/core/types.ts",
+    "src/core/ui.ts",
+    "src/data/narration.ts",
+    "src/main.ts"
+  ],
+  "contract": {
+    "outputSchema": {
+      "actId": "string",
+      "edits": "string[]",
+      "defects": "{ frame: string, what: string, cause: string, owner: 'lane' | 'shared' }[]",
+      "escalations": "{ targetFile: string, what: string, why: string }[]",
+      "verdict": "'pass' | 'fixed' | 'blocked' | 'unknown'",
+      "touchedFiles": "string[]"
+    },
+    "verdicts": [
+      "pass",
+      "fixed",
+      "blocked",
+      "unknown"
+    ],
+    "maxVectorRounds": 2
+  },
+  "runs": [
+    {
+      "date": "2026-08-03",
+      "rounds": 2,
+      "frames": 33,
+      "lanesPassed": 8,
+      "escalationsResolved": 2,
+      "escalationsDeferred": 0,
+      "note": "최초 실행. 라운드 1의 리듀스에서 하네스 자체 결함을 발견했다 — Director.goTo가 전환 중 호출되면 transition을 리셋해 seek에 영영 진입하지 못했고, 세 막의 프레임이 바이트 동일하게 나왔다. 아무 에러도 나지 않았다. 세 레인이 독립적으로 같은 증상을 보고한 것이 신호였다. vow 레인은 확인 불가로 판단해 수정 0건을 반환했고, 그 판단이 잘못된 수정을 막았다. 라운드 2는 정상 프레임으로 재실행 — 2 pass, 6 fixed, 소유권 위반 0."
+    }
+  ]
+}

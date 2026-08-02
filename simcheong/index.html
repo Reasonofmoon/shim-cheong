@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>심청전 — 절차적 렌더</title>
+    <!--
+      An inline seal, matching the cover. This exists to keep the audit harness's
+      console gate binary: without it every capture run reports one 404 for a
+      missing favicon, and an operator who sees "console errors: 1" on every
+      clean run learns to ignore the number entirely.
+    -->
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='3' fill='rgb(200,64,47)'/%3E%3Ctext x='16' y='24' font-size='22' text-anchor='middle' fill='rgb(246,239,224)' font-family='serif'%3E沈%3C/text%3E%3C/svg%3E"
+    />
+    <meta
+      name="description"
+      content="한국 고전 심청전을 Three.js 절차적 지오메트리만으로 렌더링한 8막 애니메이션."
+    />
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="stage"></canvas>
+      <div id="fade" class="fade"></div>
+      <div id="overlay" class="overlay"></div>
+      <div id="boot" class="boot">
+        <div class="boot__seal">沈</div>
+        <h1 class="boot__title">심청전</h1>
+        <p class="boot__sub">沈淸傳 · 여덟 마당</p>
+        <p class="boot__note">에셋 없이, 코드로만 지어 올린 세계</p>
+        <button id="begin" class="boot__begin" type="button">첫 마당 열기</button>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

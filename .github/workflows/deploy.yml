@@ -1,0 +1,63 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let one deployment finish rather than cancelling it mid-publish; a cancelled
+# Pages deploy can leave the site on a half-published state.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: simcheong/package-lock.json
+
+      - name: Install
+        working-directory: simcheong
+        run: npm ci
+
+      # `build` is `tsc --noEmit && vite build`, so a type error fails the
+      # deploy rather than shipping a broken film.
+      - name: Build
+        working-directory: simcheong
+        run: npm run build
+
+      # The harness's own unit tests are cheap and guard the manifest
+      # invariants that the capture script depends on.
+      - name: Harness checks
+        working-directory: simcheong
+        run: |
+          npm run audit:test
+          npm run audit:check
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: simcheong/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
