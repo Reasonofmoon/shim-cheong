@@ -282,6 +282,12 @@ body {
   background: rgba(32, 34, 40, 0.85);
 }
 
+/* 음소거 상태는 색으로 말한다 — 아이콘만으로는 켜짐/꺼짐이 안 읽힌다. */
+.player__btn.is-off {
+  color: rgba(239, 231, 214, 0.35);
+  border-color: rgba(239, 231, 214, 0.1);
+}
+
 .player__btn--primary {
   min-width: 3rem;
   font-size: 1rem;

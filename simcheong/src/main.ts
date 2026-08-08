@@ -4,6 +4,7 @@ import { CameraRig } from './core/cameraRig';
 import { Director } from './core/director';
 import { Stage } from './core/stage';
 import { Subtitles } from './core/subtitles';
+import { Narrator } from './core/narrator';
 import { PlayerUi } from './core/ui';
 import { NARRATION } from './data/narration';
 import { ACTS } from './scenes';
@@ -29,14 +30,21 @@ const begin = requireEl<HTMLButtonElement>('begin');
 const stage = new Stage(canvas);
 const rig = new CameraRig(1);
 const subtitles = new Subtitles(overlay);
+const narrator = new Narrator();
 const ui = new PlayerUi(overlay, ACTS);
 
-const director = new Director(ACTS, NARRATION, stage, rig, subtitles, fade, {
+const director = new Director(ACTS, NARRATION, stage, rig, subtitles, narrator, fade, {
   onActChange: (index, act) => ui.onActChange(index, act),
   onProgress: (a, b, c, d) => ui.onProgress(a, b, c, d),
   onPlayStateChange: (playing) => ui.onPlayStateChange(playing),
 });
 ui.attach(director);
+
+// 음성은 있으면 켜고 없으면 조용히 넘어간다. 아직 생성하지 않은 클론에서도
+// 영화는 그대로 돌아가야 하고, 그 경우 음소거 버튼은 아예 나오지 않는다.
+void narrator.load().then((ready) => {
+  if (ready) ui.attachAudio(narrator);
+});
 
 // ---------------------------------------------------------------- sizing --
 
@@ -70,6 +78,8 @@ let started = false;
 function startFilm(): void {
   if (started) return;
   started = true;
+  // 브라우저는 사용자 제스처 없이 소리를 못 내게 막는다. 이 버튼이 그 제스처다.
+  narrator.unlock();
   boot.classList.add('is-gone');
   window.setTimeout(() => {
     boot.style.display = 'none';

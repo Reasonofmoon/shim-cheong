@@ -11,7 +11,13 @@
     "typecheck": "tsc --noEmit",
     "audit:test": "node --test \"scripts/**/*.test.mjs\"",
     "audit:check": "node scripts/check-render-harness.mjs",
-    "audit:capture": "node scripts/capture.mjs"
+    "audit:capture": "node scripts/capture.mjs",
+    "audio:generate": "node --experimental-strip-types scripts/tts.mjs",
+    "audio:check": "node --experimental-strip-types scripts/tts.mjs --check",
+    "audio:script": "node --experimental-strip-types scripts/audio-script.mjs",
+    "audio:manifest": "node --experimental-strip-types scripts/audio-manifest.mjs",
+    "seedance:map": "node --experimental-strip-types scripts/seedance-map.mjs",
+    "audio:script:bare": "node --experimental-strip-types scripts/audio-script.mjs --bare"
   },
   "dependencies": {
     "three": "^0.185.1"

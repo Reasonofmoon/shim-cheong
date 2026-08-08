@@ -1,5 +1,6 @@
 import type { Act } from './types';
 import type { Director } from './director';
+import type { Narrator } from './narrator';
 
 /**
  * The player chrome: chapter title, transport, scrubber, and act chips.
@@ -23,7 +24,9 @@ export class PlayerUi {
   private readonly chips: HTMLButtonElement[] = [];
   private readonly cardEl: HTMLElement;
 
+  private readonly muteBtn: HTMLButtonElement;
   private director: Director | null = null;
+  private narrator: Narrator | null = null;
   private idleTimer = 0;
   private scrubbing = false;
 
@@ -73,7 +76,11 @@ export class PlayerUi {
     this.timeEl.className = 'player__time';
     this.timeEl.textContent = '0:00 / 0:00';
 
-    bar.append(prevBtn, this.playBtn, nextBtn, this.scrub, this.timeEl);
+    // 음성이 생성돼 있을 때만 나타난다. attachAudio()가 켠다.
+    this.muteBtn = this.button('♪', '소리 켜기 / 끄기 (M)', () => this.toggleMute());
+    this.muteBtn.hidden = true;
+
+    bar.append(prevBtn, this.playBtn, nextBtn, this.scrub, this.timeEl, this.muteBtn);
 
     // ---- Act chips ---------------------------------------------------------
     this.chipsEl = document.createElement('div');
@@ -104,6 +111,27 @@ export class PlayerUi {
 
   attach(director: Director): void {
     this.director = director;
+  }
+
+  /** 나레이션 음성이 실제로 있을 때만 호출된다. */
+  attachAudio(narrator: Narrator): void {
+    this.narrator = narrator;
+    this.muteBtn.hidden = false;
+    this.reflectMute();
+  }
+
+  private toggleMute(): void {
+    if (!this.narrator) return;
+    this.narrator.setMuted(!this.narrator.isMuted);
+    this.reflectMute();
+  }
+
+  private reflectMute(): void {
+    if (!this.narrator) return;
+    const muted = this.narrator.isMuted;
+    this.muteBtn.textContent = muted ? '♪̸' : '♪';
+    this.muteBtn.classList.toggle('is-off', muted);
+    this.muteBtn.title = muted ? '소리 켜기 (M)' : '소리 끄기 (M)';
   }
 
   onActChange(index: number, act: Act): void {
@@ -180,6 +208,9 @@ export class PlayerUi {
           break;
         case 'KeyR':
           d.seek(0);
+          break;
+        case 'KeyM':
+          this.toggleMute();
           break;
         default:
           if (e.code.startsWith('Digit')) {

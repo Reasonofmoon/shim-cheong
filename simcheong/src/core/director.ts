@@ -6,6 +6,7 @@ import type { Act, ActRuntime, Caption } from './types';
 import type { CameraRig } from './cameraRig';
 import type { Stage } from './stage';
 import type { Subtitles } from './subtitles';
+import type { Narrator } from './narrator';
 
 /**
  * The projectionist.
@@ -36,6 +37,7 @@ export class Director {
   private readonly stage: Stage;
   private readonly rig: CameraRig;
   private readonly subtitles: Subtitles;
+  private readonly narrator: Narrator;
   private readonly fadeEl: HTMLElement;
   private readonly events: DirectorEvents;
 
@@ -59,6 +61,7 @@ export class Director {
     stage: Stage,
     rig: CameraRig,
     subtitles: Subtitles,
+    narrator: Narrator,
     fadeEl: HTMLElement,
     events: DirectorEvents,
   ) {
@@ -67,6 +70,7 @@ export class Director {
     this.stage = stage;
     this.rig = rig;
     this.subtitles = subtitles;
+    this.narrator = narrator;
     this.fadeEl = fadeEl;
     this.events = events;
 
@@ -252,7 +256,11 @@ export class Director {
     this.rig.tick(dt);
     this.current?.update(frame, this.rig);
 
-    this.subtitles.update(act.id, this.captions[act.id] ?? [], t);
+    const captions = this.captions[act.id] ?? [];
+    this.subtitles.update(act.id, captions, t);
+    // 나레이션은 자막과 같은 인자로 간다. 들리는 것과 보이는 것이 어긋나면
+    // 안 되므로 활성 자막을 고르는 규칙도 양쪽이 같다.
+    this.narrator.update(act.id, captions, t, this.playing);
     this.events.onProgress(t, act.duration, this.globalTime, this.totalDuration);
   }
 
@@ -274,6 +282,9 @@ export class Director {
     this.rig.reset(this.index);
     this.stage.applyMood(act.sky);
     this.subtitles.clear();
+    // 이전 막의 대사가 새 막으로 넘어오면 안 된다.
+    this.narrator.stop();
+    this.narrator.warm(act.id, this.captions[act.id] ?? []);
 
     this.current = act.build({ rng, stage: this.stage });
     this.holder.add(this.current.root);
