@@ -1,8 +1,19 @@
 node_modules/
+runs/
 dist/
+out/
+.DS_Store
+Thumbs.db
 
-# 감사 산출물 — 33프레임 + 덤프. 재생성 가능하므로 커밋하지 않는다.
+# procedural render workspace
+simcheong/node_modules/
+simcheong/dist/
+.playwright-mcp/
 simcheong/audit/
 
-.DS_Store
+# TTS API 키 — 절대 커밋하지 않는다
+.fish-audio-key
+simcheong/.fish-audio-key
+
+# 로컬 전용 설정
 *.local
